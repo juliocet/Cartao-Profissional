@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Julio Cesar Teixeira Junior</title>
+<meta name="description" content="Cartão de visita digital – SEPEN / TJRJ">
+<style>
+  :root{
+    --primaria:#0f2a4a; --destaque:#b8913a; --fundo:#eef1f5;
+    --cartao:#ffffff; --texto:#1b2430; --suave:#5b6675; --linha:#e1e5eb;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --fundo:#0b1420; --cartao:#131f2e; --texto:#e8edf3;
+           --suave:#9aa7b7; --linha:#22324a; }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--fundo);color:var(--texto);
+    min-height:100vh;display:flex;justify-content:center;align-items:flex-start;
+    padding:24px 16px;
+  }
+  .cartao{width:100%;max-width:420px;background:var(--cartao);
+    border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+  .topo{background:linear-gradient(135deg,var(--primaria),#16375f);
+    color:#fff;padding:30px 24px 22px;text-align:center}
+  .avatar{width:76px;height:76px;border-radius:50%;margin:0 auto 12px;
+    background:var(--destaque);color:#fff;display:flex;align-items:center;
+    justify-content:center;font-size:30px;font-weight:600;
+    border:3px solid rgba(255,255,255,.35)}
+  .nome{font-size:21px;font-weight:600;line-height:1.2}
+  .cargo{font-size:12.5px;opacity:.9;margin-top:6px;line-height:1.35}
+  .org{font-size:12px;opacity:.8;margin-top:4px}
+  .corpo{padding:16px 20px 8px}
+  .item{display:flex;align-items:center;gap:12px;padding:11px 4px;
+    border-bottom:1px solid var(--linha);text-decoration:none;color:var(--texto)}
+  .item:last-child{border-bottom:none}
+  .ic{width:34px;height:34px;flex:0 0 34px;border-radius:9px;
+    background:rgba(15,42,74,.08);color:var(--primaria);
+    display:flex;align-items:center;justify-content:center;font-size:16px}
+  @media (prefers-color-scheme: dark){.ic{background:rgba(255,255,255,.08);color:#cfe0ff}}
+  .rot{font-size:10.5px;color:var(--suave);text-transform:uppercase;letter-spacing:.4px}
+  .val{font-size:14px;margin-top:1px;word-break:break-word}
+  .copiar{margin-left:auto;border:none;background:transparent;color:var(--suave);
+    font-size:11px;cursor:pointer;padding:6px 8px;border-radius:7px}
+  .copiar:active{background:var(--linha)}
+  .acoes{padding:14px 20px 24px}
+  .btn{display:block;width:100%;text-align:center;padding:14px;border-radius:12px;
+    border:none;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;
+    background:var(--primaria);color:#fff;margin-top:10px}
+  .btn.ouro{background:var(--destaque)}
+  .pe{text-align:center;font-size:10.5px;color:var(--suave);padding:0 20px 20px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+    background:#111;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;
+    opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.on{opacity:.95}
+</style>
+</head>
+<body>
+<div class="cartao">
+  <div class="topo">
+    <div class="avatar" id="ini">JT</div>
+    <div class="nome" id="fn">Julio Cesar Teixeira Junior</div>
+    <div class="cargo">Chefe do Serviço de Gerenciamento de Penas Pecuniárias — SEPEN</div>
+    <div class="org">Tribunal de Justiça do Estado do Rio de Janeiro — TJRJ</div>
+  </div>
+  <div class="corpo" id="lista"></div>
+  <div class="acoes">
+    <button class="btn ouro" id="salvar">Salvar contato</button>
+    <a class="btn" id="waBtn" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  </div>
+  <div class="pe">Cartão de visita digital · SEPEN / TJRJ</div>
+</div>
+<div class="toast" id="toast">Copiado</div>
+
+<script>
+const C = {
+  nome: "Julio Cesar Teixeira Junior",
+  cargo: "Chefe do Serviço de Gerenciamento de Penas Pecuniárias",
+  org: "Tribunal de Justiça do Estado do Rio de Janeiro",
+  setor: "SEPEN",
+  telefone: "+55 21 3133-4489",
+  whatsapp: "5521980625559",
+  email: "julioteixeira@tjrj.jus.br",
+  emailSetor: "deipa.sepen@tjrj.jus.br",
+  site: "https://www.tjrj.jus.br/institucional/secretarias-gerais/sgsus/desoc/digad/sepen",
+  endereco: "Palácio da Justiça – Av. Erasmo Braga, nº 115 – Lâmina I, 9º andar, sala 911",
+  cidade: "Rio de Janeiro – RJ"
+};
+
+const lista = document.getElementById('lista');
+function item(rot, val, href, copiavel){
+  if(!val) return;
+  const el = document.createElement(href ? 'a' : 'div');
+  el.className = 'item';
+  if(href){ el.href = href; if(href.startsWith('http')) el.target='_blank'; }
+  el.innerHTML =
+    '<div class="ic">●</div><div><div class="rot">'+rot+
+    '</div><div class="val">'+val+'</div></div>';
+  if(copiavel){
+    const b = document.createElement('button');
+    b.className='copiar'; b.textContent='copiar';
+    b.onclick=(e)=>{e.preventDefault();e.stopPropagation();copiar(val);};
+    el.appendChild(b);
+  }
+  lista.appendChild(el);
+}
+item('Telefone', C.telefone, 'tel:'+C.telefone.replace(/[^+\d]/g,''), true);
+item('WhatsApp', '+55 21 98062-5559', 'https://wa.me/'+C.whatsapp, true);
+item('E-mail', C.email, 'mailto:'+C.email, true);
+item('E-mail do setor', C.emailSetor, 'mailto:'+C.emailSetor, true);
+item('Endereço', C.endereco, null, true);
+item('Cidade', C.cidade, null, false);
+item('Página SEPEN', 'tjrj.jus.br · SEPEN', C.site, false);
+
+const toast = document.getElementById('toast');
+function aviso(t){toast.textContent=t;toast.classList.add('on');
+  setTimeout(()=>toast.classList.remove('on'),1400);}
+function copiar(txt){
+  navigator.clipboard.writeText(txt).then(()=>aviso('Copiado')).catch(()=>aviso('Copie manualmente'));
+}
+
+document.getElementById('waBtn').href = 'https://wa.me/'+C.whatsapp;
+
+function vcard(){
+  return ['BEGIN:VCARD','VERSION:3.0',
+    'N:Teixeira Junior;Julio Cesar;;;',
+    'FN:'+C.nome,
+    'ORG:'+C.org+';'+C.setor,
+    'TITLE:'+C.cargo,
+    'TEL;TYPE=WORK,VOICE:'+C.telefone,
+    'TEL;TYPE=CELL:+'+C.whatsapp,
+    'EMAIL;TYPE=WORK,INTERNET,PREF:'+C.email,
+    'EMAIL;TYPE=WORK,INTERNET:'+C.emailSetor,
+    'URL:'+C.site,
+    'ADR;TYPE=WORK:;;'+C.endereco.replace(/,/g,'\\,')+';Rio de Janeiro;RJ;;Brasil',
+    'END:VCARD'].join('\r\n');
+}
+document.getElementById('salvar').onclick=function(){
+  const blob = new Blob([vcard()], {type:'text/vcard'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'Julio_Cesar_Teixeira_Junior.vcf';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+};
+</script>
+</body>
+</html>
