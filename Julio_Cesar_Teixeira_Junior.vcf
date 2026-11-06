@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Teixeira Junior;Julio Cesar;;;
+FN:Julio Cesar Teixeira Junior
+ORG:Tribunal de Justiça do Estado do Rio de Janeiro;SEPEN
+TITLE:Chefe do Serviço de Gerenciamento de Penas Pecuniárias
+TEL;TYPE=WORK,VOICE:+55 21 3133-4489
+TEL;TYPE=CELL:+5521980625559
+EMAIL;TYPE=WORK,INTERNET,PREF:julioteixeira@tjrj.jus.br
+EMAIL;TYPE=WORK,INTERNET:deipa.sepen@tjrj.jus.br
+URL:https://www.tjrj.jus.br/institucional/secretarias-gerais/sgsus/desoc/digad/sepen
+ADR;TYPE=WORK:;;Palácio da Justiça – Av. Erasmo Braga\, nº 115 – Lâmina I\, 9º andar\, sala 911;Rio de Janeiro;RJ;;Brasil
+END:VCARD
